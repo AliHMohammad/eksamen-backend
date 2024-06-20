@@ -21,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -52,11 +53,13 @@ public class AthleteService {
         return toDTO(athlete);
     }
 
+    @Transactional
     public AthleteResponseDTO deleteAthlete(long id) {
         //TODO: Unit Test?
         Athlete athleteInDB = athleteRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Athlete with id " + id + " not found."));
 
+        resultRepository.deleteAllByAthleteId(id);
         athleteRepository.deleteById(id);
         return toDTO(athleteInDB);
     }

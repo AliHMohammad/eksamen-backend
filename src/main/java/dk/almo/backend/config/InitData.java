@@ -95,7 +95,7 @@ public class InitData implements ApplicationRunner {
     private void createDisciplines() {
         disciplines.add(new Discipline("Rowing 300m", ResultType.MILLISECONDS));
         disciplines.add(new Discipline("Long Jump", ResultType.CENTIMETER));
-        disciplines.add(new Discipline("Dart Shooting", ResultType.POINTS));
+        disciplines.add(new Discipline("Dart Throwing", ResultType.POINTS));
         disciplines.add(new Discipline("100m Sprint", ResultType.MILLISECONDS));
 
         disciplineRepository.saveAll(disciplines);
@@ -112,7 +112,7 @@ public class InitData implements ApplicationRunner {
         athletes.add(new Athlete("Ali", "Haider", "Mohammad", LocalDate.of(1995, 5, 15), Gender.MALE, clubs.get(0)));
         athletes.add(new Athlete("Berfin", "Flora", "Turan", LocalDate.of(1998, 3, 22), Gender.FEMALE, clubs.get(1)));
         athletes.add(new Athlete("John", "Andrew", "Doe", LocalDate.of(1992, 8, 10), Gender.MALE, clubs.get(2)));
-        athletes.add(new Athlete("Jane", "Alicia", "Smith", LocalDate.of(2000, 1, 5), Gender.FEMALE, clubs.get(0)));
+        athletes.add(new Athlete("Sama", "Alicia", "Smith", LocalDate.of(2000, 1, 5), Gender.FEMALE, clubs.get(0)));
         athletes.add(new Athlete("Michael", "James", "Johnson", LocalDate.of(1989, 11, 14), Gender.MALE, clubs.get(1)));
         athletes.add(new Athlete("Emily", "Rose", "Davis", LocalDate.of(1996, 7, 30), Gender.FEMALE, clubs.get(2)));
         athletes.add(new Athlete("Chris", "David", "Brown", LocalDate.of(1994, 4, 18), Gender.OTHER, clubs.get(1)));

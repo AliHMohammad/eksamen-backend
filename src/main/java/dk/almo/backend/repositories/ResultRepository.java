@@ -18,4 +18,6 @@ public interface ResultRepository extends JpaRepository<Result, Long> {
     Page<Result> findAllByAthleteGenderAndDisciplineId(Gender athlete_gender, Long discipline_id, Pageable pageable);
 
     Page<Result> findAllByDisciplineId(Long discipline_id, Pageable pageable);
+
+    void deleteAllByAthleteId(Long athlete_id);
 }
