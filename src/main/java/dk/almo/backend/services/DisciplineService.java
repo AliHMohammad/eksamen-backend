@@ -2,9 +2,12 @@ package dk.almo.backend.services;
 
 import dk.almo.backend.DTOs.discipline.DisciplineRequestDTO;
 import dk.almo.backend.DTOs.discipline.DisciplineResponseDTO;
+import dk.almo.backend.models.Athlete;
 import dk.almo.backend.models.Discipline;
 import dk.almo.backend.models.ResultType;
+import dk.almo.backend.repositories.AthleteRepository;
 import dk.almo.backend.repositories.DisciplineRepository;
+import dk.almo.backend.utils.BadRequestException;
 import dk.almo.backend.utils.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +18,9 @@ public class DisciplineService {
     private final DisciplineRepository disciplineRepository;
 
 
+
     public DisciplineService(DisciplineRepository disciplineRepository) {
         this.disciplineRepository = disciplineRepository;
-
     }
 
 
@@ -53,4 +56,6 @@ public class DisciplineService {
 
         return toDTO(disciplineInDB);
     }
+
+
 }

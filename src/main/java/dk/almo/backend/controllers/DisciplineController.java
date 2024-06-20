@@ -40,4 +40,9 @@ public class DisciplineController {
     public ResponseEntity<DisciplineResponseDTO> updateDisciplineName(@PathVariable long id, @Valid @RequestBody DisciplineRequestNameDTO disciplineRequestNameDTO) {
         return ResponseEntity.ok(disciplineService.updateDisciplineName(id, disciplineRequestNameDTO.name()));
     }
+
+    @PostMapping("/{disciplineId}/athletes/{athleteId}")
+    public ResponseEntity<DisciplineResponseDTO> AssignAthleteToDiscipline(@PathVariable long disciplineId, @PathVariable long athleteId) {
+        return ResponseEntity.ok(disciplineService.AssignAthleteToDiscipline(disciplineId, athleteId));
+    }
 }
