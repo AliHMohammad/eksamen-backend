@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "disciplines")
@@ -41,8 +42,15 @@ public class DisciplineController {
         return ResponseEntity.ok(disciplineService.updateDisciplineName(id, disciplineRequestNameDTO.name()));
     }
 
-    @PostMapping("/{disciplineId}/athletes/{athleteId}")
-    public ResponseEntity<DisciplineResponseDTO> AssignAthleteToDiscipline(@PathVariable long disciplineId, @PathVariable long athleteId) {
-        return ResponseEntity.ok(disciplineService.AssignAthleteToDiscipline(disciplineId, athleteId));
+    @GetMapping
+    public ResponseEntity<List<DisciplineResponseDTO>> getDisciplines() {
+        return ResponseEntity.ok(disciplineService.getDisciplines());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DisciplineResponseDTO> getDisciplineById(@PathVariable long id) {
+        return ResponseEntity.ok(disciplineService.getDisciplineById(id));
+    }
+
+
 }

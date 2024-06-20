@@ -22,13 +22,14 @@ public class AthleteService {
     }
 
     public DisciplineResponseDTO AssignDisciplineToAthlete(long disciplineId, long athleteId) {
-        //TODO: Lav en test
+        //TODO: Mangler integration test
+        //TODO: Lav en unittest?
         Discipline disciplineInDB = disciplineRepository.findById(disciplineId)
                 .orElseThrow(() -> new EntityNotFoundException("Discipline with id " + disciplineId + " not found."));
         Athlete athleteInDB = athleteRepository.findById(athleteId)
                 .orElseThrow(() -> new EntityNotFoundException("Athlete with id " + athleteId + " not found."));
 
-        // Hvis han alllerede har disciplinen. TODO: Test?
+        // Hvis han alllerede har disciplinen. TODO: unitTest?
         if (athleteInDB.getDisciplines().contains(disciplineInDB)) {
             throw new BadRequestException("Athlete with id " + athleteId + " is already assigned to discipline " + disciplineInDB.getName());
         }

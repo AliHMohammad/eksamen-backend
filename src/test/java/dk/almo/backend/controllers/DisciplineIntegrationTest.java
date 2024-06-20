@@ -14,6 +14,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -55,7 +58,7 @@ class DisciplineIntegrationTest {
                 .value(res -> {
                     assertNotNull(res.id());
                     assertEquals("Test Discipline 300", res.name());
-                    assertEquals("MILLIMETER", res.resultType());
+                    assertEquals("Millimeter", res.resultType());
                 });
     }
 
@@ -81,5 +84,48 @@ class DisciplineIntegrationTest {
                 });
     }
 
+    @Test
+    void getDisciplines() {
+        List<Discipline> disciplines = new ArrayList<>();
+        disciplines.add(new Discipline("One", ResultType.MILLISECONDS));
+        disciplines.add(new Discipline("Two", ResultType.MILLISECONDS));
+
+        disciplineRepository.saveAll(disciplines);
+
+        webTestClient
+                .get().uri("/disciplines")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBodyList(DisciplineResponseDTO.class)
+                .consumeWith(res -> {
+                    List<DisciplineResponseDTO> responseBody = res.getResponseBody();
+                    assertNotNull(responseBody);
+                    assertEquals(2, responseBody.size());
+                });
+    }
+
+
+    @Test
+    void getDisciplineById() {
+        var dis = new Discipline("Rowing 300m", ResultType.MILLISECONDS);
+
+        disciplineRepository.save(dis);
+
+        var parameter = "/disciplines/" + dis.getId();
+
+        webTestClient
+                .get().uri(parameter)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody(DisciplineResponseDTO.class)
+                .value(res -> {
+                    assertNotNull(res.id());
+                    assertEquals(dis.getId(), res.id());
+                    assertEquals("Rowing 300m", res.name());
+                    assertEquals("Milliseconds", res.resultType());
+                });
+    }
 
 }

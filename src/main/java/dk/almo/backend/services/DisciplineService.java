@@ -11,6 +11,8 @@ import dk.almo.backend.utils.BadRequestException;
 import dk.almo.backend.utils.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class DisciplineService {
 
@@ -30,24 +32,8 @@ public class DisciplineService {
         return toDTO(discipline);
     }
 
-
-    private Discipline toEntity(DisciplineRequestDTO disciplineRequestDTO) {
-        return new Discipline(
-                disciplineRequestDTO.name(),
-                ResultType.valueOf(disciplineRequestDTO.resultType().toUpperCase())
-        );
-    }
-
-    private DisciplineResponseDTO toDTO(Discipline discipline) {
-        return new DisciplineResponseDTO(
-                discipline.getId(),
-                discipline.getName(),
-                discipline.getResultType().toString()
-        );
-    }
-
     public DisciplineResponseDTO updateDisciplineName(long id, String name) {
-        //TODO: Lav en test
+        //TODO: Lav en unittest
         Discipline disciplineInDB = disciplineRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Discipline with id " + id + " not found."));
 
@@ -58,4 +44,29 @@ public class DisciplineService {
     }
 
 
+    public List<DisciplineResponseDTO> getDisciplines() {
+        return disciplineRepository.findAll().stream().map(this::toDTO).toList();
+    }
+
+    public DisciplineResponseDTO getDisciplineById(long id) {
+        return disciplineRepository.findById(id).map(this::toDTO)
+                .orElseThrow(() -> new EntityNotFoundException("Discipline with id " + id + " not found."));
+    }
+
+
+    private Discipline toEntity(DisciplineRequestDTO disciplineRequestDTO) {
+        return new Discipline(
+                disciplineRequestDTO.name(),
+                ResultType.valueOf(disciplineRequestDTO.resultType().toUpperCase())
+        );
+    }
+
+    private DisciplineResponseDTO toDTO(Discipline discipline) {
+        String resultType = discipline.getResultType().toString();
+        return new DisciplineResponseDTO(
+                discipline.getId(),
+                discipline.getName(),
+                resultType.substring(0, 1).toUpperCase() + resultType.substring(1).toLowerCase()
+        );
+    }
 }
