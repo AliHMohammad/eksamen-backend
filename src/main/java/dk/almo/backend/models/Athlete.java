@@ -58,6 +58,18 @@ public class Athlete {
         this.club = club;
     }
 
+    public Athlete(String firstName, String middleName, String lastName, LocalDate dateOfBirth, Gender gender, Club club, Set<Discipline> disciplines) {
+        this.firstName = capitalize(firstName);
+        this.middleName = capitalize(middleName);
+        this.lastName = capitalize(lastName);
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+        this.club = club;
+        this.disciplines = disciplines;
+    }
+
+
+
     public Athlete(String fullName, LocalDate dateOfBirth, Gender gender) {
         this(fullName, dateOfBirth, gender, null);
     }
@@ -67,6 +79,14 @@ public class Athlete {
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
         this.club = club;
+    }
+
+    public Athlete(String fullName, LocalDate dateOfBirth, Gender gender, Club club, Set<Discipline> disciplines) {
+        setFullName(capitalize(fullName));
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+        this.club = club;
+        this.disciplines = disciplines;
     }
 
     public int getAge() {

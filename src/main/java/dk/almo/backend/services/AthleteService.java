@@ -22,9 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class AthleteService {
@@ -75,9 +73,19 @@ public class AthleteService {
         Club clubInDB = clubRepository.findById(athleteRequestDTO.clubId())
                 .orElseThrow(() -> new EntityNotFoundException("Club with id " + athleteRequestDTO.clubId() + " not found."));
 
+        Set<Discipline> disciplines = new HashSet<>();
+
+        for (Long disciplineId : athleteRequestDTO.disciplineIds()) {
+            Discipline disciplineInDB = disciplineRepository.findById(disciplineId)
+                    .orElseThrow(() -> new EntityNotFoundException("Discipline with id " + disciplineId + " not found."));
+
+            disciplines.add(disciplineInDB);
+        }
+
         athleteInDB.setFullName(athleteRequestDTO.fullName());
         athleteInDB.setGender(athleteRequestDTO.gender());
         athleteInDB.setClub(clubInDB);
+        athleteInDB.setDisciplines(disciplines);
 
         athleteRepository.save(athleteInDB);
         return toDTO(athleteInDB);
@@ -127,6 +135,15 @@ public class AthleteService {
     }
 
     private Athlete toEntity(AthleteRequestDTO athleteRequestDTO) {
+        Set<Discipline> disciplines = new HashSet<>();
+
+        for (Long disciplineId : athleteRequestDTO.disciplineIds()) {
+            Discipline disciplineInDB = disciplineRepository.findById(disciplineId)
+                    .orElseThrow(() -> new EntityNotFoundException("Discipline with id " + disciplineId + " not found."));
+
+            disciplines.add(disciplineInDB);
+        }
+
         Athlete athlete = new Athlete(
                 athleteRequestDTO.firstName(),
                 athleteRequestDTO.middleName(),
@@ -134,7 +151,8 @@ public class AthleteService {
                 athleteRequestDTO.dateOfBirth(),
                 Gender.valueOf(athleteRequestDTO.gender().toUpperCase()),
                 clubRepository.findById(athleteRequestDTO.clubId())
-                        .orElseThrow(() -> new EntityNotFoundException("Club with id " + athleteRequestDTO.clubId() + " not found."))
+                        .orElseThrow(() -> new EntityNotFoundException("Club with id " + athleteRequestDTO.clubId() + " not found.")),
+                disciplines
         );
 
         if (athleteRequestDTO.fullName() != null) {

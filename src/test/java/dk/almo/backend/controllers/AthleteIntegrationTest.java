@@ -22,6 +22,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -64,6 +66,12 @@ class AthleteIntegrationTest {
         var club = new Club("My Club");
         clubRepository.save(club);
         var dob = LocalDate.now();
+        var disOne = new Discipline("Rowing 100m", ResultType.MILLISECONDS);
+        var disTwo = new Discipline("Sprinting 300m", ResultType.MILLISECONDS);
+
+        disciplineRepository.saveAll(List.of(disOne, disTwo));
+
+        var disciplines = new ArrayList<>(List.of(disOne.getId(), disTwo.getId()));
 
         webTestClient
                 .post().uri("/athletes")
@@ -75,7 +83,8 @@ class AthleteIntegrationTest {
                         null,
                         "Male",
                         dob,
-                        club.getId()
+                        club.getId(),
+                        disciplines
                 ))
                 .exchange()
                 .expectStatus().isCreated()
@@ -90,7 +99,7 @@ class AthleteIntegrationTest {
                     assertEquals("Male", res.gender());
                     assertEquals(dob, res.dateOfBirth());
                     assertEquals(club.getId(), res.club().id());
-                    assertEquals(0, res.disciplines().size());
+                    assertEquals(2, res.disciplines().size());
                 });
     }
 
@@ -138,10 +147,18 @@ class AthleteIntegrationTest {
         athleteRepository.save(athlete);
         var club = new Club("Warriors");
         clubRepository.save(club);
+        var disOne = new Discipline("Rowing 100m", ResultType.MILLISECONDS);
+        var disTwo = new Discipline("Sprinting 300m", ResultType.MILLISECONDS);
+
+        disciplineRepository.saveAll(List.of(disOne, disTwo));
+
+        var disciplines = new ArrayList<>(List.of(disOne.getId(), disTwo.getId()));
+
         var payload = new AthletePutRequestDTO(
                 "Miley Cyrus",
                 "Other",
-                club.getId()
+                club.getId(),
+                disciplines
         );
 
         webTestClient
@@ -157,6 +174,7 @@ class AthleteIntegrationTest {
                     assertEquals(payload.fullName(), res.fullName());
                     assertEquals(payload.gender(), res.gender());
                     assertEquals(payload.clubId(), res.club().id());
+                    assertEquals(2, res.disciplines().size());
                 });
     }
 

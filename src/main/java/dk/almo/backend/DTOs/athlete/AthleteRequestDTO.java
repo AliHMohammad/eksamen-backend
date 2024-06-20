@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record AthleteRequestDTO(
         //TODO: error beskeder
@@ -16,7 +17,8 @@ public record AthleteRequestDTO(
         String gender,
         @NotNull
         LocalDate dateOfBirth,
-        Long clubId
+        Long clubId,
+        List<Long> disciplineIds
 
 ) {
 }

@@ -3,7 +3,7 @@ package dk.almo.backend.DTOs.athlete;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDate;
+import java.util.List;
 
 public record AthletePutRequestDTO(
         //TODO: Fejl beskeder
@@ -12,6 +12,9 @@ public record AthletePutRequestDTO(
         @NotBlank
         String gender,
         @NotNull
-        Long clubId
+        Long clubId,
+
+        @NotNull
+        List<Long> disciplineIds
 ) {
 }
