@@ -1,8 +1,10 @@
 package dk.almo.backend.config;
 
 import dk.almo.backend.models.Athlete;
+import dk.almo.backend.models.Club;
 import dk.almo.backend.models.Gender;
 import dk.almo.backend.repositories.AthleteRepository;
+import dk.almo.backend.repositories.ClubRepository;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.Ordered;
@@ -18,9 +20,11 @@ public class InitData implements ApplicationRunner {
 
 
     private final AthleteRepository athleteRepository;
+    private final ClubRepository clubRepository;
 
-    public InitData(AthleteRepository athleteRepository) {
+    public InitData(AthleteRepository athleteRepository, ClubRepository clubRepository) {
         this.athleteRepository = athleteRepository;
+        this.clubRepository = clubRepository;
     }
 
     @Override
@@ -32,6 +36,15 @@ public class InitData implements ApplicationRunner {
     private void createInitialData() {
         //TODO: Create data
         createAthletes();
+        createClubs();
+    }
+
+    private void createClubs() {
+        List<Club> clubs = new ArrayList<>();
+
+        clubs.add(new Club("Tigers"));
+
+        clubRepository.saveAll(clubs);
     }
 
     private void createAthletes() {

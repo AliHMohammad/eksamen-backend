@@ -36,4 +36,8 @@ public class Discipline {
         this.name = name;
         this.resultType = resultType;
     }
+
+    public String getResultType() {
+        return resultType.toString().substring(0, 1).toUpperCase() + resultType.toString().substring(1).toLowerCase();
+    }
 }

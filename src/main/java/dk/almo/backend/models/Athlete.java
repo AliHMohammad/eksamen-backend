@@ -33,7 +33,7 @@ public class Athlete {
     @ManyToOne
     private Club club;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Discipline> disciplines = new HashSet<>();
 
     public Athlete(String firstName, String middleName, String lastName, LocalDate dateOfBirth, Gender gender) {
@@ -100,5 +100,9 @@ public class Athlete {
         }
 
         return name.substring(0, 1).toUpperCase()+name.substring(1).toLowerCase();
+    }
+
+    public String getGender() {
+        return gender.toString().substring(0, 1).toUpperCase() + gender.toString().substring(1).toLowerCase();
     }
 }

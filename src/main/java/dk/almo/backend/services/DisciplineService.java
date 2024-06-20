@@ -49,6 +49,7 @@ public class DisciplineService {
     }
 
     public DisciplineResponseDTO getDisciplineById(long id) {
+        //TODO: Test?
         return disciplineRepository.findById(id).map(this::toDTO)
                 .orElseThrow(() -> new EntityNotFoundException("Discipline with id " + id + " not found."));
     }
@@ -61,12 +62,12 @@ public class DisciplineService {
         );
     }
 
-    private DisciplineResponseDTO toDTO(Discipline discipline) {
-        String resultType = discipline.getResultType().toString();
+    public DisciplineResponseDTO toDTO(Discipline discipline) {
+
         return new DisciplineResponseDTO(
                 discipline.getId(),
                 discipline.getName(),
-                resultType.substring(0, 1).toUpperCase() + resultType.substring(1).toLowerCase()
+                discipline.getResultType()
         );
     }
 }
