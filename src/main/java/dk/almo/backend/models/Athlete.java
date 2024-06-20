@@ -4,8 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,6 +38,12 @@ public class Athlete {
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Discipline> disciplines = new HashSet<>();
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     public Athlete(String firstName, String middleName, String lastName, LocalDate dateOfBirth, Gender gender) {
         this(firstName, middleName, lastName, dateOfBirth, gender, null);
