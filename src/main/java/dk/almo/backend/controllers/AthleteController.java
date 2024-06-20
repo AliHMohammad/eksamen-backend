@@ -1,10 +1,8 @@
 package dk.almo.backend.controllers;
 
-import dk.almo.backend.DTOs.athlete.AthleteDetailedResponseDTO;
 import dk.almo.backend.DTOs.athlete.AthletePutRequestDTO;
 import dk.almo.backend.DTOs.athlete.AthleteRequestDTO;
 import dk.almo.backend.DTOs.athlete.AthleteResponseDTO;
-import dk.almo.backend.DTOs.discipline.DisciplineResponseDTO;
 import dk.almo.backend.services.AthleteService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -54,8 +52,12 @@ public class AthleteController {
     }
 
     @PostMapping("/{athleteId}/disciplines/{disciplineId}")
-    //TODO: SKAL RETURNERE DTO
-    public ResponseEntity<AthleteResponseDTO> AssignDisciplineToAthlete(@PathVariable long disciplineId, @PathVariable long athleteId) {
-        return ResponseEntity.ok(athleteService.AssignDisciplineToAthlete(disciplineId, athleteId));
+    public ResponseEntity<AthleteResponseDTO> assignDisciplineToAthlete(@PathVariable long disciplineId, @PathVariable long athleteId) {
+        return ResponseEntity.ok(athleteService.assignDisciplineToAthlete(disciplineId, athleteId));
+    }
+
+    @DeleteMapping("/{athleteId}/disciplines/{disciplineId}")
+    public ResponseEntity<AthleteResponseDTO> deleteDisciplineToAthlete(@PathVariable long disciplineId, @PathVariable long athleteId) {
+        return ResponseEntity.ok(athleteService.deleteDisciplineToAthlete(disciplineId, athleteId));
     }
 }

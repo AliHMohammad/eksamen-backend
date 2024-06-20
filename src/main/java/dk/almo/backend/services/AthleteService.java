@@ -4,7 +4,6 @@ import dk.almo.backend.DTOs.athlete.AthleteDetailedResponseDTO;
 import dk.almo.backend.DTOs.athlete.AthletePutRequestDTO;
 import dk.almo.backend.DTOs.athlete.AthleteRequestDTO;
 import dk.almo.backend.DTOs.athlete.AthleteResponseDTO;
-import dk.almo.backend.DTOs.discipline.DisciplineResponseDTO;
 import dk.almo.backend.models.Athlete;
 import dk.almo.backend.models.Club;
 import dk.almo.backend.models.Discipline;
@@ -46,9 +45,37 @@ public class AthleteService {
         return toDTO(athlete);
     }
 
+    public AthleteResponseDTO deleteAthlete(long id) {
+        //TODO: Unit Test?
+        Athlete athleteInDB = athleteRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Athlete with id " + id + " not found."));
 
-    public AthleteResponseDTO AssignDisciplineToAthlete(long disciplineId, long athleteId) {
-        //TODO: Mangler integration test
+        athleteRepository.deleteById(id);
+        return toDTO(athleteInDB);
+    }
+
+    public AthleteResponseDTO getAthleteById(long id) {
+        return athleteRepository.findById(id).map(this::toDTO)
+                .orElseThrow(() -> new EntityNotFoundException("Athlete with id " + id + " not found."));
+    }
+
+    public AthleteResponseDTO updateAthleteById(long id, AthletePutRequestDTO athleteRequestDTO) {
+        Athlete athleteInDB = athleteRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Athlete with id " + id + " not found."));
+
+        Club clubInDB = clubRepository.findById(athleteRequestDTO.clubId())
+                .orElseThrow(() -> new EntityNotFoundException("Club with id " + athleteRequestDTO.clubId() + " not found."));
+
+        athleteInDB.setFullName(athleteRequestDTO.fullName());
+        athleteInDB.setGender(athleteRequestDTO.gender());
+        athleteInDB.setClub(clubInDB);
+
+        athleteRepository.save(athleteInDB);
+        return toDTO(athleteInDB);
+    }
+
+
+    public AthleteResponseDTO assignDisciplineToAthlete(long disciplineId, long athleteId) {
         //TODO: Lav en unittest?
         Discipline disciplineInDB = disciplineRepository.findById(disciplineId)
                 .orElseThrow(() -> new EntityNotFoundException("Discipline with id " + disciplineId + " not found."));
@@ -57,7 +84,7 @@ public class AthleteService {
 
         // Hvis han alllerede har disciplinen. TODO: unitTest?
         if (athleteInDB.getDisciplines().contains(disciplineInDB)) {
-            throw new BadRequestException("Athlete with id " + athleteId + " is already assigned to discipline " + disciplineInDB.getName());
+            throw new BadRequestException("Athlete with id " + athleteId + " is already assigned to discipline " + disciplineInDB.getName() + ".");
         }
 
         athleteInDB.getDisciplines().add(disciplineInDB);
@@ -69,7 +96,26 @@ public class AthleteService {
         return toDTO(athleteInDB);
     }
 
+    public AthleteResponseDTO deleteDisciplineToAthlete(long disciplineId, long athleteId) {
+        //TODO: Lav en unittest?
+        Discipline disciplineInDB = disciplineRepository.findById(disciplineId)
+                .orElseThrow(() -> new EntityNotFoundException("Discipline with id " + disciplineId + " not found."));
+        Athlete athleteInDB = athleteRepository.findById(athleteId)
+                .orElseThrow(() -> new EntityNotFoundException("Athlete with id " + athleteId + " not found."));
 
+        // Hvis han alllerede har disciplinen. TODO: unitTest?
+        if (!athleteInDB.getDisciplines().contains(disciplineInDB)) {
+            throw new BadRequestException("Athlete with id " + athleteId + " is not assigned to discipline " + disciplineInDB.getName() + ".");
+        }
+
+        athleteInDB.getDisciplines().remove(disciplineInDB);
+        disciplineInDB.getAthletes().remove(athleteInDB);
+        athleteRepository.save(athleteInDB);
+        disciplineRepository.save(disciplineInDB);
+
+
+        return toDTO(athleteInDB);
+    }
 
     private Athlete toEntity(AthleteRequestDTO athleteRequestDTO) {
         Athlete athlete = new Athlete(
@@ -126,34 +172,5 @@ public class AthleteService {
                 athlete.getDisciplines().isEmpty() ? new ArrayList<>() : athlete.getDisciplines().stream().map(disciplineService::toDTO).toList(),
                 results
         );
-    }
-
-    public AthleteResponseDTO deleteAthlete(long id) {
-        //TODO: Unit Test?
-        Athlete athleteInDB = athleteRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Athlete with id " + id + " not found."));
-
-        athleteRepository.deleteById(id);
-        return toDTO(athleteInDB);
-    }
-
-    public AthleteResponseDTO getAthleteById(long id) {
-        return athleteRepository.findById(id).map(this::toDTO)
-                .orElseThrow(() -> new EntityNotFoundException("Athlete with id " + id + " not found."));
-    }
-
-    public AthleteResponseDTO updateAthleteById(long id, AthletePutRequestDTO athleteRequestDTO) {
-        Athlete athleteInDB = athleteRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Athlete with id " + id + " not found."));
-
-        Club clubInDB = clubRepository.findById(athleteRequestDTO.clubId())
-                .orElseThrow(() -> new EntityNotFoundException("Club with id " + athleteRequestDTO.clubId() + " not found."));
-
-        athleteInDB.setFullName(athleteRequestDTO.fullName());
-        athleteInDB.setGender(athleteRequestDTO.gender());
-        athleteInDB.setClub(clubInDB);
-
-        athleteRepository.save(athleteInDB);
-        return toDTO(athleteInDB);
     }
 }

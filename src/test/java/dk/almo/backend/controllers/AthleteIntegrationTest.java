@@ -156,7 +156,7 @@ class AthleteIntegrationTest {
     }
 
     @Test
-    void AssignDisciplineToAthlete() {
+    void assignDisciplineToAthlete() {
         // Arrange
         var athlete = new Athlete("Lionel Messi", LocalDate.now(), Gender.MALE);
         athleteRepository.save(athlete);
@@ -174,7 +174,28 @@ class AthleteIntegrationTest {
                     assertEquals(athlete.getFullName(), res.fullName());
                     assertFalse(res.disciplines().isEmpty());
                 });
+    }
 
+    @Test
+    void deleteDisciplineToAthlete() {
+        // Arrange
+        var athlete = new Athlete("Mikkel Hansen", LocalDate.now(), Gender.MALE);
+        var dis = new Discipline("Rowing 1000m", ResultType.MILLISECONDS);
+        athlete.getDisciplines().add(dis);
+        dis.getAthletes().add(athlete);
+        disciplineRepository.save(dis);
+        athleteRepository.save(athlete);
 
+        webTestClient
+                .delete().uri("/athletes/" + athlete.getId() + "/disciplines/" + dis.getId())
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody(AthleteResponseDTO.class)
+                .value(res -> {
+                    assertNotNull(res.id());
+                    assertEquals(athlete.getFullName(), res.fullName());
+                    assertTrue(res.disciplines().isEmpty());
+                });
     }
 }
