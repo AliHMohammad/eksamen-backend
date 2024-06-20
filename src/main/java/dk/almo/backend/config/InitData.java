@@ -21,6 +21,8 @@ public class InitData implements ApplicationRunner {
     private final AthleteRepository athleteRepository;
     private final ClubRepository clubRepository;
     private final DisciplineRepository disciplineRepository;
+    List<Discipline> disciplines = new ArrayList<>();
+    List<Athlete> athletes = new ArrayList<>();
 
     public InitData(AthleteRepository athleteRepository, ClubRepository clubRepository, DisciplineRepository disciplineRepository) {
         this.athleteRepository = athleteRepository;
@@ -39,11 +41,16 @@ public class InitData implements ApplicationRunner {
         createAthletes();
         createClubs();
         createDisciplines();
+        createAthletesDisciplines();
+    }
+
+    private void createAthletesDisciplines() {
+        athletes.get(0).getDisciplines().add(disciplines.get(0));
+        athletes.get(1).getDisciplines().add(disciplines.get(0));
+        athleteRepository.saveAll(athletes);
     }
 
     private void createDisciplines() {
-        List<Discipline> disciplines = new ArrayList<>();
-
         disciplines.add(new Discipline("Rowing 300m", ResultType.MILLISECONDS));
 
         disciplineRepository.saveAll(disciplines);
@@ -58,8 +65,6 @@ public class InitData implements ApplicationRunner {
     }
 
     private void createAthletes() {
-        List<Athlete> athletes = new ArrayList<>();
-
         athletes.add(new Athlete("ali", "haider", "mohammad", LocalDate.now(), Gender.MALE));
         athletes.add(new Athlete("berfin flORA tuRAN", LocalDate.now(), Gender.FEMALE));
 

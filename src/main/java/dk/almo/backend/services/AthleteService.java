@@ -14,9 +14,14 @@ import dk.almo.backend.repositories.DisciplineRepository;
 import dk.almo.backend.repositories.ResultRepository;
 import dk.almo.backend.utils.BadRequestException;
 import dk.almo.backend.utils.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class AthleteService {
@@ -36,7 +41,6 @@ public class AthleteService {
         this.disciplineService = disciplineService;
         this.resultRepository = resultRepository;
     }
-
 
 
     public AthleteResponseDTO createAthlete(AthleteRequestDTO athleteRequestDTO) {
@@ -172,5 +176,81 @@ public class AthleteService {
                 athlete.getDisciplines().isEmpty() ? new ArrayList<>() : athlete.getDisciplines().stream().map(disciplineService::toDTO).toList(),
                 results
         );
+    }
+
+    public Page<AthleteResponseDTO> getAthletes(
+            Integer pageIndex,
+            Integer pageSize,
+            Long discipline,
+            Optional<String> sortDir,
+            Optional<String> sortBy,
+            Optional<String> gender,
+            Optional<String> club,
+            Optional<String> searchBy) {
+
+        Pageable pageable = PageRequest.of(
+                pageIndex,
+                pageSize,
+                Sort.Direction.valueOf(sortDir.orElse("ASC")),
+                sortBy.orElse("id")
+        );
+
+
+        if (searchBy.isPresent() && gender.isPresent() && club.isPresent()) {
+            var searchValue = searchBy.get();
+            var genderValue = Gender.valueOf(gender.get().toUpperCase());
+            var clubId = Long.valueOf(club.get());
+            return athleteRepository.findAllByFirstNameContainsIgnoreCaseOrLastNameContainsIgnoreCaseAndGenderAndClubIdAndDisciplinesId(
+                            searchValue, searchValue, genderValue, clubId, discipline, pageable)
+                    .map(this::toDTO);
+        }
+
+        if (searchBy.isPresent() && gender.isPresent()) {
+            var searchValue = searchBy.get();
+            var genderValue = Gender.valueOf(gender.get().toUpperCase());
+            return athleteRepository.findAllByFirstNameContainsIgnoreCaseOrLastNameContainsIgnoreCaseAndGenderAndDisciplinesId(searchValue, searchValue,
+                            genderValue, discipline, pageable)
+                    .map(this::toDTO);
+        }
+
+        if (searchBy.isPresent() && club.isPresent()) {
+            var searchValue = searchBy.get();
+            var clubId = Long.valueOf(club.get());
+            return athleteRepository.findAllByFirstNameContainsIgnoreCaseOrLastNameContainsIgnoreCaseAndClubIdAndDisciplinesId(searchValue, searchValue,
+                            clubId, discipline, pageable)
+                    .map(this::toDTO);
+        }
+
+        if (gender.isPresent() && club.isPresent()) {
+            var genderValue = Gender.valueOf(gender.get().toUpperCase());
+            var clubId = Long.valueOf(club.get());
+            return athleteRepository.findAllByGenderAndClubIdAndDisciplinesId(genderValue, clubId, discipline, pageable)
+                    .map(this::toDTO);
+        }
+
+
+        if (searchBy.isPresent()) {
+            var searchValue = searchBy.get();
+            return athleteRepository.findAllByFirstNameContainsIgnoreCaseOrLastNameContainsIgnoreCaseAndDisciplinesId(searchValue, searchValue, discipline,
+                            pageable)
+                    .map(this::toDTO);
+        }
+
+        if (gender.isPresent()) {
+            var genderValue = Gender.valueOf(gender.get().toUpperCase());
+            return athleteRepository.findAllByGenderAndDisciplinesId(genderValue, discipline, pageable)
+                    .map(this::toDTO);
+        }
+
+        if (club.isPresent()) {
+            var clubId = Long.valueOf(club.get());
+            return athleteRepository.findAllByClubIdAndDisciplinesId(clubId, discipline, pageable)
+                    .map(this::toDTO);
+        }
+
+        return athleteRepository.findAllByDisciplinesId(discipline, pageable)
+                .map(this::toDTO);
+
+
     }
 }

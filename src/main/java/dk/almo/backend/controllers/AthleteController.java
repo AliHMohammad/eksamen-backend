@@ -5,11 +5,13 @@ import dk.almo.backend.DTOs.athlete.AthleteRequestDTO;
 import dk.almo.backend.DTOs.athlete.AthleteResponseDTO;
 import dk.almo.backend.services.AthleteService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "athletes")
@@ -20,6 +22,21 @@ public class AthleteController {
 
     public AthleteController(AthleteService athleteService) {
         this.athleteService = athleteService;
+    }
+
+
+    @GetMapping
+    public ResponseEntity<Page<AthleteResponseDTO>> getAthletes(
+            @RequestParam Integer pageIndex,
+            @RequestParam Integer pageSize,
+            @RequestParam String discipline,
+            @RequestParam Optional<String> sortDir,
+            @RequestParam Optional<String> sortBy,
+            @RequestParam Optional<String> gender,
+            @RequestParam Optional<String> club,
+            @RequestParam Optional<String> searchBy
+    ) {
+        return ResponseEntity.ok(athleteService.getAthletes(pageIndex, pageSize, Long.valueOf(discipline), sortDir, sortBy, gender, club, searchBy));
     }
 
 
