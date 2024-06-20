@@ -82,7 +82,7 @@ public class InitData implements ApplicationRunner {
     private void createDisciplines() {
         disciplines.add(new Discipline("Rowing 300m", ResultType.MILLISECONDS));
         disciplines.add(new Discipline("Long Jump", ResultType.CENTIMETER));
-        disciplines.add(new Discipline("Shot Put", ResultType.MILLIMETER));
+        disciplines.add(new Discipline("Dart Shooting", ResultType.POINTS));
         disciplines.add(new Discipline("High Jump", ResultType.CENTIMETER));
         disciplines.add(new Discipline("100m Sprint", ResultType.MILLISECONDS));
         disciplines.add(new Discipline("200m Sprint", ResultType.MILLISECONDS));
