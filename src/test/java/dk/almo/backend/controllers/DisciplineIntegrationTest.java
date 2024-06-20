@@ -5,7 +5,9 @@ import dk.almo.backend.DTOs.discipline.DisciplineRequestNameDTO;
 import dk.almo.backend.DTOs.discipline.DisciplineResponseDTO;
 import dk.almo.backend.models.Discipline;
 import dk.almo.backend.models.ResultType;
+import dk.almo.backend.repositories.AthleteRepository;
 import dk.almo.backend.repositories.DisciplineRepository;
+import dk.almo.backend.repositories.ResultRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -28,11 +30,19 @@ class DisciplineIntegrationTest {
     private DisciplineRepository disciplineRepository;
 
     @Autowired
+    private AthleteRepository athleteRepository;
+
+    @Autowired
+    private ResultRepository resultRepository;
+
+    @Autowired
     private WebTestClient webTestClient;
 
 
     @AfterEach
     void deleteEntities() {
+        resultRepository.deleteAll();
+        athleteRepository.deleteAll();
         disciplineRepository.deleteAll();
     }
 

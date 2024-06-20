@@ -19,6 +19,7 @@ public class Result {
 
     private LocalDate date;
 
+    @Column(name = "result_value")
     private long value;
 
     @ManyToOne
@@ -26,6 +27,11 @@ public class Result {
 
     @ManyToOne
     private Athlete athlete;
+
+    public Result(LocalDate date, long value) {
+        this.date = date;
+        this.value = value;
+    }
 
     public Result(LocalDate date, long value, Discipline discipline, Athlete athlete) {
         this.date = date;

@@ -10,6 +10,7 @@ import dk.almo.backend.models.*;
 import dk.almo.backend.repositories.AthleteRepository;
 import dk.almo.backend.repositories.ClubRepository;
 import dk.almo.backend.repositories.DisciplineRepository;
+import dk.almo.backend.repositories.ResultRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -38,12 +39,16 @@ class AthleteIntegrationTest {
     private ClubRepository clubRepository;
 
     @Autowired
+    private ResultRepository resultRepository;
+
+    @Autowired
     private WebTestClient webTestClient;
 
 
     //Note: Rækkefølgen betyder noget. Ellers får du fejl i terminalen
     @AfterEach
     void deleteEntities() {
+        resultRepository.deleteAll();
         athleteRepository.deleteAll();
         clubRepository.deleteAll();
         disciplineRepository.deleteAll();

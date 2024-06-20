@@ -143,7 +143,7 @@ public class AthleteService {
         return athlete;
     }
 
-    private AthleteResponseDTO toDTO(Athlete athlete) {
+    public AthleteResponseDTO toDTO(Athlete athlete) {
 
         return new AthleteResponseDTO(
                 athlete.getId(),
