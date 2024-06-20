@@ -123,7 +123,7 @@ class AthleteIntegrationTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
-                .expectBody(AthleteResponseDTO.class)
+                .expectBody(AthleteDetailedResponseDTO.class)
                 .value(res -> {
                     assertNotNull(res.id());
                     assertEquals("Gabriel Hannah", res.fullName());

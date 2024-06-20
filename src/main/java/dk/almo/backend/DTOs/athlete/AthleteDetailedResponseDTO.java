@@ -1,9 +1,9 @@
 package dk.almo.backend.DTOs.athlete;
 
 import dk.almo.backend.DTOs.discipline.DisciplineResponseDTO;
+import dk.almo.backend.DTOs.result.ResultDetailedResponseDTO;
 import dk.almo.backend.DTOs.result.ResultResponseDTO;
 import dk.almo.backend.models.Club;
-import dk.almo.backend.models.Result;
 
 import java.time.LocalDate;
 import java.util.List;

@@ -4,6 +4,7 @@ import dk.almo.backend.DTOs.athlete.AthleteDetailedResponseDTO;
 import dk.almo.backend.DTOs.athlete.AthletePutRequestDTO;
 import dk.almo.backend.DTOs.athlete.AthleteRequestDTO;
 import dk.almo.backend.DTOs.athlete.AthleteResponseDTO;
+import dk.almo.backend.DTOs.result.ResultDetailedResponseDTO;
 import dk.almo.backend.DTOs.result.ResultResponseDTO;
 import dk.almo.backend.models.Athlete;
 import dk.almo.backend.models.Club;
@@ -61,8 +62,8 @@ public class AthleteService {
         return toDTO(athleteInDB);
     }
 
-    public AthleteResponseDTO getAthleteById(long id) {
-        return athleteRepository.findById(id).map(this::toDTO)
+    public AthleteDetailedResponseDTO getAthleteById(long id) {
+        return athleteRepository.findById(id).map(this::toDetailedDTO)
                 .orElseThrow(() -> new EntityNotFoundException("Athlete with id " + id + " not found."));
     }
 
@@ -168,9 +169,7 @@ public class AthleteService {
                         result.getId(),
                         result.getDate(),
                         result.getValue(),
-                        result.getDiscipline().getResultType(),
-                        disciplineService.toDTO(result.getDiscipline()),
-                        toDTO(result.getAthlete())
+                        disciplineService.toDTO(result.getDiscipline())
                 )
         ).toList();
 

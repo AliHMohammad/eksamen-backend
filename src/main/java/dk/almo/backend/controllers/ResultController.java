@@ -1,9 +1,8 @@
 package dk.almo.backend.controllers;
 
-import dk.almo.backend.DTOs.athlete.AthleteDetailedResponseDTO;
 import dk.almo.backend.DTOs.result.ResultRequestDTO;
 import dk.almo.backend.DTOs.result.ResultRequestValueDTO;
-import dk.almo.backend.DTOs.result.ResultResponseDTO;
+import dk.almo.backend.DTOs.result.ResultDetailedResponseDTO;
 import dk.almo.backend.services.ResultService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -28,7 +27,7 @@ public class ResultController {
 
 
     @GetMapping
-    public ResponseEntity<Page<ResultResponseDTO>> getResults(
+    public ResponseEntity<Page<ResultDetailedResponseDTO>> getResults(
             @RequestParam Integer pageIndex,
             @RequestParam Integer pageSize,
             @RequestParam String discipline,
@@ -40,31 +39,31 @@ public class ResultController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResultResponseDTO> deleteResultById(@PathVariable long id) {
+    public ResponseEntity<ResultDetailedResponseDTO> deleteResultById(@PathVariable long id) {
         return ResponseEntity.ok(resultService.deleteResultById(id));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ResultResponseDTO> updateResultValue(@Valid @RequestBody ResultRequestValueDTO resultRequestValueDTO, @PathVariable long id) {
+    public ResponseEntity<ResultDetailedResponseDTO> updateResultValue(@Valid @RequestBody ResultRequestValueDTO resultRequestValueDTO, @PathVariable long id) {
         return ResponseEntity.ok(resultService.updateResultValue(id, resultRequestValueDTO.value()));
     }
 
     @PostMapping
-    public ResponseEntity<ResultResponseDTO> registerResultForAthlete(@Valid @RequestBody ResultRequestDTO resultRequestDTO) {
-        ResultResponseDTO resultResponseDTO = resultService.registerResultForAthlete(resultRequestDTO);
+    public ResponseEntity<ResultDetailedResponseDTO> registerResultForAthlete(@Valid @RequestBody ResultRequestDTO resultRequestDTO) {
+        ResultDetailedResponseDTO resultDetailedResponseDTO = resultService.registerResultForAthlete(resultRequestDTO);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(resultResponseDTO.id())
+                .buildAndExpand(resultDetailedResponseDTO.id())
                 .toUri();
 
-        return ResponseEntity.created(location).body(resultResponseDTO);
+        return ResponseEntity.created(location).body(resultDetailedResponseDTO);
     }
 
     @PostMapping("/bulk")
-    public ResponseEntity<List<ResultResponseDTO>> registerBulkResultsForAthletes(@Valid @RequestBody List<ResultRequestDTO> resultRequestDTOList){
-        List<ResultResponseDTO> resultResponseDTO = resultService.registerBulkResultsForAthletes(resultRequestDTOList);
-        return ResponseEntity.ok(resultResponseDTO);
+    public ResponseEntity<List<ResultDetailedResponseDTO>> registerBulkResultsForAthletes(@Valid @RequestBody List<ResultRequestDTO> resultRequestDTOList){
+        List<ResultDetailedResponseDTO> resultDetailedResponseDTO = resultService.registerBulkResultsForAthletes(resultRequestDTOList);
+        return ResponseEntity.ok(resultDetailedResponseDTO);
     }
 }

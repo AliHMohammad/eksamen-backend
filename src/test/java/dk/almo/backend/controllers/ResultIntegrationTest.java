@@ -1,12 +1,8 @@
 package dk.almo.backend.controllers;
 
-import dk.almo.backend.DTOs.athlete.AthleteResponseDTO;
-import dk.almo.backend.DTOs.discipline.DisciplineRequestDTO;
-import dk.almo.backend.DTOs.discipline.DisciplineRequestNameDTO;
-import dk.almo.backend.DTOs.discipline.DisciplineResponseDTO;
 import dk.almo.backend.DTOs.result.ResultRequestDTO;
 import dk.almo.backend.DTOs.result.ResultRequestValueDTO;
-import dk.almo.backend.DTOs.result.ResultResponseDTO;
+import dk.almo.backend.DTOs.result.ResultDetailedResponseDTO;
 import dk.almo.backend.models.*;
 import dk.almo.backend.repositories.AthleteRepository;
 import dk.almo.backend.repositories.DisciplineRepository;
@@ -21,7 +17,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -73,12 +68,11 @@ class ResultIntegrationTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
-                .expectBody(ResultResponseDTO.class)
+                .expectBody(ResultDetailedResponseDTO.class)
                 .value(res -> {
                     assertNotNull(res.id());
                     assertEquals(result.getDate(), res.date());
                     assertEquals(result.getValue(), res.value());
-                    assertEquals(discipline.getResultType(), res.valueType());
                 });
 
     }
@@ -101,7 +95,7 @@ class ResultIntegrationTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
-                .expectBody(ResultResponseDTO.class)
+                .expectBody(ResultDetailedResponseDTO.class)
                 .value(res -> {
                     assertNotNull(res.id());
                     assertEquals(500L, res.value());
@@ -130,7 +124,7 @@ class ResultIntegrationTest {
                 .exchange()
                 .expectStatus().isCreated()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
-                .expectBody(ResultResponseDTO.class)
+                .expectBody(ResultDetailedResponseDTO.class)
                 .value(res -> {
                     assertNotNull(res.id());
                     assertEquals(payload.value(), res.value());
@@ -174,9 +168,9 @@ class ResultIntegrationTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
-                .expectBodyList(ResultResponseDTO.class)
+                .expectBodyList(ResultDetailedResponseDTO.class)
                 .consumeWith(res -> {
-                    List<ResultResponseDTO> responseBody = res.getResponseBody();
+                    List<ResultDetailedResponseDTO> responseBody = res.getResponseBody();
                     assertNotNull(responseBody);
                     assertEquals(2, responseBody.size());
                     assertNotNull(responseBody.get(0).id());

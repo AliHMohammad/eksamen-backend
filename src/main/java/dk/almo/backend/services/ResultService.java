@@ -1,7 +1,7 @@
 package dk.almo.backend.services;
 
 import dk.almo.backend.DTOs.result.ResultRequestDTO;
-import dk.almo.backend.DTOs.result.ResultResponseDTO;
+import dk.almo.backend.DTOs.result.ResultDetailedResponseDTO;
 import dk.almo.backend.models.Athlete;
 import dk.almo.backend.models.Discipline;
 import dk.almo.backend.models.Gender;
@@ -40,7 +40,7 @@ public class ResultService {
     }
 
 
-    public ResultResponseDTO deleteResultById(long id) {
+    public ResultDetailedResponseDTO deleteResultById(long id) {
         Result resultInDB = resultRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Result with id " + id + " not found."));
 
@@ -49,7 +49,7 @@ public class ResultService {
         return toDTO(resultInDB);
     }
 
-    public ResultResponseDTO updateResultValue(long id, long newValue) {
+    public ResultDetailedResponseDTO updateResultValue(long id, long newValue) {
         Result resultInDB = resultRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Result with id " + id + " not found."));
         resultInDB.setValue(newValue);
@@ -59,12 +59,11 @@ public class ResultService {
         return toDTO(resultInDB);
     }
 
-    private ResultResponseDTO toDTO(Result result) {
-        return new ResultResponseDTO(
+    private ResultDetailedResponseDTO toDTO(Result result) {
+        return new ResultDetailedResponseDTO(
                 result.getId(),
                 result.getDate(),
                 result.getValue(),
-                result.getDiscipline().getResultType(),
                 disciplineService.toDTO(result.getDiscipline()),
                 athleteService.toDTO(result.getAthlete())
         );
@@ -85,7 +84,7 @@ public class ResultService {
     }
 
 
-    public ResultResponseDTO registerResultForAthlete(ResultRequestDTO resultRequestDTO) {
+    public ResultDetailedResponseDTO registerResultForAthlete(ResultRequestDTO resultRequestDTO) {
         Result result = toEntity(resultRequestDTO);
 
         resultRepository.save(result);
@@ -93,19 +92,19 @@ public class ResultService {
         return toDTO(result);
     }
 
-    public List<ResultResponseDTO> registerBulkResultsForAthletes(List<ResultRequestDTO> resultRequestDTOList) {
-        List<ResultResponseDTO> resultResponseDTOS = new ArrayList<>();
+    public List<ResultDetailedResponseDTO> registerBulkResultsForAthletes(List<ResultRequestDTO> resultRequestDTOList) {
+        List<ResultDetailedResponseDTO> resultDetailedResponseDTOS = new ArrayList<>();
 
 
 
         for (ResultRequestDTO request: resultRequestDTOList) {
-            resultResponseDTOS.add(registerResultForAthlete(request));
+            resultDetailedResponseDTOS.add(registerResultForAthlete(request));
         }
 
-        return resultResponseDTOS;
+        return resultDetailedResponseDTOS;
     }
 
-    public Page<ResultResponseDTO> getResults(
+    public Page<ResultDetailedResponseDTO> getResults(
             Integer pageIndex,
             Integer pageSize,
             Long discipline,

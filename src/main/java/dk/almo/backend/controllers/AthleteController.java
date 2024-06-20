@@ -61,7 +61,7 @@ public class AthleteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AthleteResponseDTO> getAthleteById(@PathVariable long id) {
+    public ResponseEntity<AthleteDetailedResponseDTO> getAthleteById(@PathVariable long id) {
         return ResponseEntity.ok(athleteService.getAthleteById(id));
     }
 
