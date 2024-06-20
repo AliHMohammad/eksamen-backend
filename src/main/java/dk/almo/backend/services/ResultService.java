@@ -4,15 +4,21 @@ import dk.almo.backend.DTOs.result.ResultRequestDTO;
 import dk.almo.backend.DTOs.result.ResultResponseDTO;
 import dk.almo.backend.models.Athlete;
 import dk.almo.backend.models.Discipline;
+import dk.almo.backend.models.Gender;
 import dk.almo.backend.models.Result;
 import dk.almo.backend.repositories.AthleteRepository;
 import dk.almo.backend.repositories.DisciplineRepository;
 import dk.almo.backend.repositories.ResultRepository;
 import dk.almo.backend.utils.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ResultService {
@@ -97,5 +103,32 @@ public class ResultService {
         }
 
         return resultResponseDTOS;
+    }
+
+    public Page<ResultResponseDTO> getResults(
+            Integer pageIndex,
+            Integer pageSize,
+            Long discipline,
+            Optional<String> sortDir,
+            Optional<String> sortBy,
+            Optional<String> gender
+    ) {
+
+        Pageable pageable = PageRequest.of(
+                pageIndex,
+                pageSize,
+                Sort.Direction.valueOf(sortDir.orElse("ASC")),
+                sortBy.orElse("id")
+        );
+
+
+        if (gender.isPresent()) {
+            var genderValue = Gender.valueOf(gender.get().toUpperCase());
+            return resultRepository.findAllByAthleteGenderAndDisciplineId(genderValue, discipline, pageable)
+                    .map(this::toDTO);
+        }
+
+        return resultRepository.findAllByDisciplineId(discipline, pageable)
+                .map(this::toDTO);
     }
 }
