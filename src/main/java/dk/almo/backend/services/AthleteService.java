@@ -4,6 +4,7 @@ import dk.almo.backend.DTOs.athlete.AthleteDetailedResponseDTO;
 import dk.almo.backend.DTOs.athlete.AthletePutRequestDTO;
 import dk.almo.backend.DTOs.athlete.AthleteRequestDTO;
 import dk.almo.backend.DTOs.athlete.AthleteResponseDTO;
+import dk.almo.backend.DTOs.result.ResultResponseDTO;
 import dk.almo.backend.models.Athlete;
 import dk.almo.backend.models.Club;
 import dk.almo.backend.models.Discipline;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -40,6 +42,7 @@ public class AthleteService {
         this.clubRepository = clubRepository;
         this.disciplineService = disciplineService;
         this.resultRepository = resultRepository;
+
     }
 
 
@@ -160,8 +163,16 @@ public class AthleteService {
     }
 
     private AthleteDetailedResponseDTO toDetailedDTO(Athlete athlete) {
-        //TODO: Results skal ændres til at returnere DTO version
-        var results = resultRepository.findAllByAthleteId(athlete.getId());
+        List<ResultResponseDTO> results = resultRepository.findAllByAthleteId(athlete.getId()).stream().map(result ->
+                new ResultResponseDTO(
+                        result.getId(),
+                        result.getDate(),
+                        result.getValue(),
+                        result.getDiscipline().getResultType(),
+                        disciplineService.toDTO(result.getDiscipline()),
+                        toDTO(result.getAthlete())
+                )
+        ).toList();
 
         return new AthleteDetailedResponseDTO(
                 athlete.getId(),

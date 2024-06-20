@@ -1,6 +1,7 @@
 package dk.almo.backend.DTOs.athlete;
 
 import dk.almo.backend.DTOs.discipline.DisciplineResponseDTO;
+import dk.almo.backend.DTOs.result.ResultResponseDTO;
 import dk.almo.backend.models.Club;
 import dk.almo.backend.models.Result;
 
@@ -19,7 +20,6 @@ public record AthleteDetailedResponseDTO(
         int age,
         Club club,
         List<DisciplineResponseDTO> disciplines,
-        //TODO: Skal ændres til List DTO-result
-        List<Result> results
+        List<ResultResponseDTO> results
 ) {
 }
