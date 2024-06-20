@@ -40,6 +40,16 @@ public class ResultService {
         return toDTO(resultInDB);
     }
 
+    public ResultResponseDTO updateResultValue(long id, long newValue) {
+        Result resultInDB = resultRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Result with id " + id + " not found."));
+        resultInDB.setValue(newValue);
+
+        resultRepository.save(resultInDB);
+
+        return toDTO(resultInDB);
+    }
+
     private ResultResponseDTO toDTO(Result result) {
         return new ResultResponseDTO(
                 result.getId(),
@@ -64,4 +74,6 @@ public class ResultService {
                 athleteInDB
         );
     }
+
+
 }

@@ -1,12 +1,11 @@
 package dk.almo.backend.controllers;
 
+import dk.almo.backend.DTOs.result.ResultRequestValueDTO;
 import dk.almo.backend.DTOs.result.ResultResponseDTO;
 import dk.almo.backend.services.ResultService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "results")
@@ -23,5 +22,10 @@ public class ResultController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ResultResponseDTO> deleteResultById(@PathVariable long id) {
         return ResponseEntity.ok(resultService.deleteResultById(id));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ResultResponseDTO> updateResultValue(@Valid @RequestBody ResultRequestValueDTO resultRequestValueDTO, @PathVariable long id) {
+        return ResponseEntity.ok(resultService.updateResultValue(id, resultRequestValueDTO.value()));
     }
 }
