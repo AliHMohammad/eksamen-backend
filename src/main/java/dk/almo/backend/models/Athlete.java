@@ -105,4 +105,12 @@ public class Athlete {
     public String getGender() {
         return gender.toString().substring(0, 1).toUpperCase() + gender.toString().substring(1).toLowerCase();
     }
+
+    public void setGender(String gender) {
+        this.gender = Gender.valueOf(gender.toUpperCase());
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
 }

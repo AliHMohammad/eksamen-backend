@@ -1,6 +1,7 @@
 package dk.almo.backend.controllers;
 
 import dk.almo.backend.DTOs.athlete.AthleteDetailedResponseDTO;
+import dk.almo.backend.DTOs.athlete.AthletePutRequestDTO;
 import dk.almo.backend.DTOs.athlete.AthleteRequestDTO;
 import dk.almo.backend.DTOs.athlete.AthleteResponseDTO;
 import dk.almo.backend.DTOs.discipline.DisciplineResponseDTO;
@@ -42,10 +43,19 @@ public class AthleteController {
         return ResponseEntity.ok(athleteService.deleteAthlete(id));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<AthleteResponseDTO> getAthleteById(@PathVariable long id) {
+        return ResponseEntity.ok(athleteService.getAthleteById(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AthleteResponseDTO> updateAthleteById(@PathVariable long id, @Valid @RequestBody AthletePutRequestDTO athleteRequestDTO) {
+        return ResponseEntity.ok(athleteService.updateAthleteById(id, athleteRequestDTO));
+    }
 
     @PostMapping("/{athleteId}/disciplines/{disciplineId}")
     //TODO: SKAL RETURNERE DTO
-    public ResponseEntity<DisciplineResponseDTO> AssignDisciplineToAthlete(@PathVariable long disciplineId, @PathVariable long athleteId) {
+    public ResponseEntity<AthleteResponseDTO> AssignDisciplineToAthlete(@PathVariable long disciplineId, @PathVariable long athleteId) {
         return ResponseEntity.ok(athleteService.AssignDisciplineToAthlete(disciplineId, athleteId));
     }
 }

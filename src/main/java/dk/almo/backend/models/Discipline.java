@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -28,9 +29,6 @@ public class Discipline {
     @ManyToMany(mappedBy = "disciplines")
     private Set<Athlete> athletes = new HashSet<>();
 
-    public Discipline(String name) {
-        this.name = name;
-    }
 
     public Discipline(String name, ResultType resultType) {
         this.name = name;
@@ -39,5 +37,19 @@ public class Discipline {
 
     public String getResultType() {
         return resultType.toString().substring(0, 1).toUpperCase() + resultType.toString().substring(1).toLowerCase();
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Discipline that = (Discipline) o;
+        return Objects.equals(name, that.name) && resultType == that.resultType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, resultType);
     }
 }

@@ -1,10 +1,12 @@
 package dk.almo.backend.services;
 
 import dk.almo.backend.DTOs.athlete.AthleteDetailedResponseDTO;
+import dk.almo.backend.DTOs.athlete.AthletePutRequestDTO;
 import dk.almo.backend.DTOs.athlete.AthleteRequestDTO;
 import dk.almo.backend.DTOs.athlete.AthleteResponseDTO;
 import dk.almo.backend.DTOs.discipline.DisciplineResponseDTO;
 import dk.almo.backend.models.Athlete;
+import dk.almo.backend.models.Club;
 import dk.almo.backend.models.Discipline;
 import dk.almo.backend.models.Gender;
 import dk.almo.backend.repositories.AthleteRepository;
@@ -45,7 +47,7 @@ public class AthleteService {
     }
 
 
-    public DisciplineResponseDTO AssignDisciplineToAthlete(long disciplineId, long athleteId) {
+    public AthleteResponseDTO AssignDisciplineToAthlete(long disciplineId, long athleteId) {
         //TODO: Mangler integration test
         //TODO: Lav en unittest?
         Discipline disciplineInDB = disciplineRepository.findById(disciplineId)
@@ -59,11 +61,12 @@ public class AthleteService {
         }
 
         athleteInDB.getDisciplines().add(disciplineInDB);
+        disciplineInDB.getAthletes().add(athleteInDB);
         athleteRepository.save(athleteInDB);
+        disciplineRepository.save(disciplineInDB);
 
-        //TODO: RETURN DTO
-        return null;
-        /*return toDTO(disciplineInDB);*/
+
+        return toDTO(athleteInDB);
     }
 
 
@@ -131,6 +134,26 @@ public class AthleteService {
                 .orElseThrow(() -> new EntityNotFoundException("Athlete with id " + id + " not found."));
 
         athleteRepository.deleteById(id);
+        return toDTO(athleteInDB);
+    }
+
+    public AthleteResponseDTO getAthleteById(long id) {
+        return athleteRepository.findById(id).map(this::toDTO)
+                .orElseThrow(() -> new EntityNotFoundException("Athlete with id " + id + " not found."));
+    }
+
+    public AthleteResponseDTO updateAthleteById(long id, AthletePutRequestDTO athleteRequestDTO) {
+        Athlete athleteInDB = athleteRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Athlete with id " + id + " not found."));
+
+        Club clubInDB = clubRepository.findById(athleteRequestDTO.clubId())
+                .orElseThrow(() -> new EntityNotFoundException("Club with id " + athleteRequestDTO.clubId() + " not found."));
+
+        athleteInDB.setFullName(athleteRequestDTO.fullName());
+        athleteInDB.setGender(athleteRequestDTO.gender());
+        athleteInDB.setClub(clubInDB);
+
+        athleteRepository.save(athleteInDB);
         return toDTO(athleteInDB);
     }
 }

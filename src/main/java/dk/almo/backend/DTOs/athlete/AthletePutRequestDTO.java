@@ -5,18 +5,13 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-public record AthleteRequestDTO(
-        //TODO: error beskeder
-
-        String firstName,
-        String middleName,
-        String lastName,
+public record AthletePutRequestDTO(
+        //TODO: Fejl beskeder
+        @NotBlank
         String fullName,
         @NotBlank
         String gender,
         @NotNull
-        LocalDate dateOfBirth,
         Long clubId
-
 ) {
 }

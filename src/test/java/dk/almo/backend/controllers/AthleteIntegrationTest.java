@@ -1,18 +1,19 @@
 package dk.almo.backend.controllers;
 
 import dk.almo.backend.DTOs.athlete.AthleteDetailedResponseDTO;
+import dk.almo.backend.DTOs.athlete.AthletePutRequestDTO;
 import dk.almo.backend.DTOs.athlete.AthleteRequestDTO;
 import dk.almo.backend.DTOs.athlete.AthleteResponseDTO;
 import dk.almo.backend.DTOs.discipline.DisciplineRequestDTO;
 import dk.almo.backend.DTOs.discipline.DisciplineResponseDTO;
-import dk.almo.backend.models.Athlete;
-import dk.almo.backend.models.Club;
-import dk.almo.backend.models.Gender;
+import dk.almo.backend.models.*;
 import dk.almo.backend.repositories.AthleteRepository;
 import dk.almo.backend.repositories.ClubRepository;
 import dk.almo.backend.repositories.DisciplineRepository;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -27,8 +28,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class AthleteIntegrationTest {
 
 
-    //@Autowired
-    //private DisciplineRepository disciplineRepository;
+    @Autowired
+    private DisciplineRepository disciplineRepository;
 
     @Autowired
     private AthleteRepository athleteRepository;
@@ -40,11 +41,12 @@ class AthleteIntegrationTest {
     private WebTestClient webTestClient;
 
 
+    //Note: Rækkefølgen betyder noget. Ellers får du fejl i terminalen
     @AfterEach
     void deleteEntities() {
-        //disciplineRepository.deleteAll();
         athleteRepository.deleteAll();
         clubRepository.deleteAll();
+        disciplineRepository.deleteAll();
     }
 
     @Test
@@ -104,5 +106,75 @@ class AthleteIntegrationTest {
                     assertEquals("Firstname Lastname", res.fullName());
                     assertEquals("Male", res.gender());
                 });
+    }
+
+    @Test
+    void getAthleteById() {
+        var athlete = new Athlete("Gabriel Hannah", LocalDate.now(), Gender.FEMALE);
+        athleteRepository.save(athlete);
+
+        webTestClient
+                .get().uri("/athletes/" + athlete.getId())
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody(AthleteResponseDTO.class)
+                .value(res -> {
+                    assertNotNull(res.id());
+                    assertEquals("Gabriel Hannah", res.fullName());
+                    assertEquals("Female", res.gender());
+                });
+    }
+
+    @Test
+    void updateAthleteById() {
+        // Arrange
+        var athlete = new Athlete("Hannah Montana", LocalDate.now(), Gender.FEMALE);
+        athleteRepository.save(athlete);
+        var club = new Club("Warriors");
+        clubRepository.save(club);
+        var payload = new AthletePutRequestDTO(
+                "Miley Cyrus",
+                "Other",
+                club.getId()
+        );
+
+        webTestClient
+                .put().uri("/athletes/" + athlete.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(payload)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody(AthleteResponseDTO.class)
+                .value(res -> {
+                    assertNotNull(res.id());
+                    assertEquals(payload.fullName(), res.fullName());
+                    assertEquals(payload.gender(), res.gender());
+                    assertEquals(payload.clubId(), res.club().getId());
+                });
+    }
+
+    @Test
+    void AssignDisciplineToAthlete() {
+        // Arrange
+        var athlete = new Athlete("Lionel Messi", LocalDate.now(), Gender.MALE);
+        athleteRepository.save(athlete);
+        var dis = new Discipline("Rowing 500m", ResultType.MILLISECONDS);
+        disciplineRepository.save(dis);
+
+        webTestClient
+                .post().uri("/athletes/" + athlete.getId() + "/disciplines/" + dis.getId())
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody(AthleteResponseDTO.class)
+                .value(res -> {
+                    assertNotNull(res.id());
+                    assertEquals(athlete.getFullName(), res.fullName());
+                    assertFalse(res.disciplines().isEmpty());
+                });
+
+
     }
 }
