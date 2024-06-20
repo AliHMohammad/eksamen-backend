@@ -1,14 +1,12 @@
 package dk.almo.backend.controllers;
 
 import dk.almo.backend.DTOs.discipline.DisciplineRequestDTO;
+import dk.almo.backend.DTOs.discipline.DisciplineRequestNameDTO;
 import dk.almo.backend.DTOs.discipline.DisciplineResponseDTO;
 import dk.almo.backend.services.DisciplineService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -36,5 +34,10 @@ public class DisciplineController {
                 .toUri();
 
         return ResponseEntity.created(location).body(disciplineResponseDTO);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<DisciplineResponseDTO> updateDisciplineName(@PathVariable long id, @Valid @RequestBody DisciplineRequestNameDTO disciplineRequestNameDTO) {
+        return ResponseEntity.ok(disciplineService.updateDisciplineName(id, disciplineRequestNameDTO.name()));
     }
 }

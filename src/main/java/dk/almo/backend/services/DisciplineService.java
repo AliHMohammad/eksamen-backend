@@ -5,6 +5,7 @@ import dk.almo.backend.DTOs.discipline.DisciplineResponseDTO;
 import dk.almo.backend.models.Discipline;
 import dk.almo.backend.models.ResultType;
 import dk.almo.backend.repositories.DisciplineRepository;
+import dk.almo.backend.utils.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -40,5 +41,16 @@ public class DisciplineService {
                 discipline.getName(),
                 discipline.getResultType().toString()
         );
+    }
+
+    public DisciplineResponseDTO updateDisciplineName(long id, String name) {
+        //TODO: Lav en test
+        Discipline disciplineInDB = disciplineRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Discipline with id " + id + " not found."));
+
+        disciplineInDB.setName(name);
+        disciplineRepository.save(disciplineInDB);
+
+        return toDTO(disciplineInDB);
     }
 }
