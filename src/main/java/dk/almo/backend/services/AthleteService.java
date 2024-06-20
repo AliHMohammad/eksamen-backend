@@ -89,6 +89,7 @@ public class AthleteService {
         athleteInDB.setGender(athleteRequestDTO.gender());
         athleteInDB.setClub(clubInDB);
         athleteInDB.setDisciplines(disciplines);
+        athleteInDB.setDateOfBirth(athleteRequestDTO.dateOfBirth());
 
         athleteRepository.save(athleteInDB);
         return toDTO(athleteInDB);

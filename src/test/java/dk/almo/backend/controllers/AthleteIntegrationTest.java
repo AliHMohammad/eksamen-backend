@@ -158,6 +158,7 @@ class AthleteIntegrationTest {
                 "Miley Cyrus",
                 "Other",
                 club.getId(),
+                LocalDate.now(),
                 disciplines
         );
 
