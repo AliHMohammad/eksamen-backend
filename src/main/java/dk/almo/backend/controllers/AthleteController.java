@@ -1,8 +1,10 @@
 package dk.almo.backend.controllers;
 
+import dk.almo.backend.DTOs.athlete.AthleteDetailedResponseDTO;
 import dk.almo.backend.DTOs.athlete.AthletePutRequestDTO;
 import dk.almo.backend.DTOs.athlete.AthleteRequestDTO;
 import dk.almo.backend.DTOs.athlete.AthleteResponseDTO;
+import dk.almo.backend.DTOs.result.ResultRequestDTO;
 import dk.almo.backend.services.AthleteService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -77,4 +79,6 @@ public class AthleteController {
     public ResponseEntity<AthleteResponseDTO> deleteDisciplineToAthlete(@PathVariable long disciplineId, @PathVariable long athleteId) {
         return ResponseEntity.ok(athleteService.deleteDisciplineToAthlete(disciplineId, athleteId));
     }
+
+
 }

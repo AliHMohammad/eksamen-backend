@@ -11,6 +11,9 @@ import dk.almo.backend.repositories.ResultRepository;
 import dk.almo.backend.utils.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class ResultService {
 
@@ -76,4 +79,23 @@ public class ResultService {
     }
 
 
+    public ResultResponseDTO registerResultForAthlete(ResultRequestDTO resultRequestDTO) {
+        Result result = toEntity(resultRequestDTO);
+
+        resultRepository.save(result);
+
+        return toDTO(result);
+    }
+
+    public List<ResultResponseDTO> registerBulkResultsForAthletes(List<ResultRequestDTO> resultRequestDTOList) {
+        List<ResultResponseDTO> resultResponseDTOS = new ArrayList<>();
+
+
+
+        for (ResultRequestDTO request: resultRequestDTOList) {
+            resultResponseDTOS.add(registerResultForAthlete(request));
+        }
+
+        return resultResponseDTOS;
+    }
 }
