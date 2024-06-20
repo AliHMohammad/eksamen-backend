@@ -1,5 +1,6 @@
 package dk.almo.backend.DTOs.athlete;
 
+import dk.almo.backend.DTOs.club.ClubResponseDTO;
 import dk.almo.backend.DTOs.discipline.DisciplineResponseDTO;
 import dk.almo.backend.models.Club;
 
@@ -15,7 +16,7 @@ public record AthleteResponseDTO(
         String gender,
         LocalDate dateOfBirth,
         int age,
-        Club club,
+        ClubResponseDTO club,
         List<DisciplineResponseDTO> disciplines
 
 

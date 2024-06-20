@@ -1,5 +1,6 @@
 package dk.almo.backend.DTOs.athlete;
 
+import dk.almo.backend.DTOs.club.ClubResponseDTO;
 import dk.almo.backend.DTOs.discipline.DisciplineResponseDTO;
 import dk.almo.backend.DTOs.result.ResultDetailedResponseDTO;
 import dk.almo.backend.DTOs.result.ResultResponseDTO;
@@ -18,7 +19,7 @@ public record AthleteDetailedResponseDTO(
         String gender,
         LocalDate dateOfBirth,
         int age,
-        Club club,
+        ClubResponseDTO club,
         List<DisciplineResponseDTO> disciplines,
         List<ResultResponseDTO> results
 ) {

@@ -89,7 +89,7 @@ class AthleteIntegrationTest {
                     assertEquals("Ali Haider Mohammad", res.fullName());
                     assertEquals("Male", res.gender());
                     assertEquals(dob, res.dateOfBirth());
-                    assertEquals(club.getId(), res.club().getId());
+                    assertEquals(club.getId(), res.club().id());
                     assertEquals(0, res.disciplines().size());
                 });
     }
@@ -156,7 +156,7 @@ class AthleteIntegrationTest {
                     assertNotNull(res.id());
                     assertEquals(payload.fullName(), res.fullName());
                     assertEquals(payload.gender(), res.gender());
-                    assertEquals(payload.clubId(), res.club().getId());
+                    assertEquals(payload.clubId(), res.club().id());
                 });
     }
 

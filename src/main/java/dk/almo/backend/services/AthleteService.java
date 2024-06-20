@@ -35,15 +35,16 @@ public class AthleteService {
     private final ClubRepository clubRepository;
     private final DisciplineService disciplineService;
     private final ResultRepository resultRepository;
+    private final ClubService clubService;
 
     public AthleteService(DisciplineRepository disciplineRepository, AthleteRepository athleteRepository, ClubRepository clubRepository,
-                          DisciplineService disciplineService, ResultRepository resultRepository) {
+                          DisciplineService disciplineService, ResultRepository resultRepository, ClubService clubService) {
         this.disciplineRepository = disciplineRepository;
         this.athleteRepository = athleteRepository;
         this.clubRepository = clubRepository;
         this.disciplineService = disciplineService;
         this.resultRepository = resultRepository;
-
+        this.clubService = clubService;
     }
 
 
@@ -158,7 +159,7 @@ public class AthleteService {
                 athlete.getGender(),
                 athlete.getDateOfBirth(),
                 athlete.getAge(),
-                athlete.getClub(),
+                athlete.getClub() != null ? clubService.toDTO(athlete.getClub()) : null,
                 athlete.getDisciplines().isEmpty() ? new ArrayList<>() : athlete.getDisciplines().stream().map(disciplineService::toDTO).toList()
         );
     }
@@ -182,7 +183,7 @@ public class AthleteService {
                 athlete.getGender(),
                 athlete.getDateOfBirth(),
                 athlete.getAge(),
-                athlete.getClub(),
+                athlete.getClub() != null ? clubService.toDTO(athlete.getClub()) : null,
                 athlete.getDisciplines().isEmpty() ? new ArrayList<>() : athlete.getDisciplines().stream().map(disciplineService::toDTO).toList(),
                 results
         );
