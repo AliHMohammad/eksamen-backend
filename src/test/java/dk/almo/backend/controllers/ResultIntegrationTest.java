@@ -19,6 +19,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -105,10 +106,10 @@ class ResultIntegrationTest {
 
     @Test
     void registerResultForAthlete() {
-        var athlete = new Athlete("Mikkel Jørgensen", LocalDate.now(), Gender.MALE);
         var discipline = new Discipline("Rowing 400m", ResultType.MILLISECONDS);
-        athleteRepository.save(athlete);
         disciplineRepository.save(discipline);
+        var athlete = new Athlete("Mikkel Jørgensen", LocalDate.now(), Gender.MALE, null, Set.of(discipline));
+        athleteRepository.save(athlete);
 
         var payload = new ResultRequestDTO(
                 LocalDate.now(),
@@ -139,11 +140,11 @@ class ResultIntegrationTest {
     @Test
     void registerBulkResultsForAthletes() {
         var discipline = new Discipline("Rowing 400m", ResultType.MILLISECONDS);
-        var athOne = new Athlete("Hansen Jensen", LocalDate.now(), Gender.MALE);
-        var athTwo = new Athlete("Jesper Mortensen", LocalDate.now(), Gender.MALE);
+        disciplineRepository.save(discipline);
+        var athOne = new Athlete("Hansen Jensen", LocalDate.now(), Gender.MALE, null, Set.of(discipline));
+        var athTwo = new Athlete("Jesper Mortensen", LocalDate.now(), Gender.MALE, null, Set.of(discipline));
         athleteRepository.save(athOne);
         athleteRepository.save(athTwo);
-        disciplineRepository.save(discipline);
 
         var payloadOne = new ResultRequestDTO(
                 LocalDate.now().plusDays(4),
@@ -181,13 +182,13 @@ class ResultIntegrationTest {
 
     @Test
     void updateResultById() {
-        var athlete = new Athlete("Mikkel Jørgensen", LocalDate.now(), Gender.MALE);
         var discipline = new Discipline("Rowing 400m", ResultType.MILLISECONDS);
         var newDiscipline = new Discipline("Skiing 200m", ResultType.MILLISECONDS);
-        var oldResult = new Result(LocalDate.now(), 100L, discipline, athlete);
-        athleteRepository.save(athlete);
         disciplineRepository.save(discipline);
         disciplineRepository.save(newDiscipline);
+        var athlete = new Athlete("Mikkel Jørgensen", LocalDate.now(), Gender.MALE, null, Set.of(discipline, newDiscipline));
+        athleteRepository.save(athlete);
+        var oldResult = new Result(LocalDate.now(), 100L, discipline, athlete);
         resultRepository.save(oldResult);
 
         var payload = new ResultRequestDTO(

@@ -61,4 +61,12 @@ public class Discipline {
     public int hashCode() {
         return Objects.hash(name, resultType);
     }
+
+    public void setResultType(ResultType resultType) {
+        this.resultType = resultType;
+    }
+
+    public void setResultType(String type) {
+        this.resultType = ResultType.valueOf(type.toUpperCase());
+    }
 }

@@ -1,7 +1,7 @@
 package dk.almo.backend.controllers;
 
 import dk.almo.backend.DTOs.discipline.DisciplineRequestDTO;
-import dk.almo.backend.DTOs.discipline.DisciplineRequestNameDTO;
+import dk.almo.backend.DTOs.discipline.DisciplineRequestTypeDTO;
 import dk.almo.backend.DTOs.discipline.DisciplineResponseDTO;
 import dk.almo.backend.services.DisciplineService;
 import jakarta.validation.Valid;
@@ -38,8 +38,8 @@ public class DisciplineController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<DisciplineResponseDTO> updateDisciplineName(@PathVariable long id, @Valid @RequestBody DisciplineRequestNameDTO disciplineRequestNameDTO) {
-        return ResponseEntity.ok(disciplineService.updateDisciplineName(id, disciplineRequestNameDTO.name()));
+    public ResponseEntity<DisciplineResponseDTO> updateDisciplineType(@PathVariable long id, @Valid @RequestBody DisciplineRequestTypeDTO disciplineRequestNameDTO) {
+        return ResponseEntity.ok(disciplineService.updateDisciplineType(id, disciplineRequestNameDTO.type()));
     }
 
     @GetMapping
