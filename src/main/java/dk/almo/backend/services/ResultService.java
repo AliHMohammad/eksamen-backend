@@ -88,6 +88,11 @@ public class ResultService {
     public ResultDetailedResponseDTO registerResultForAthlete(ResultRequestDTO resultRequestDTO) {
         Result result = toEntity(resultRequestDTO);
 
+        //TODO: SKAL HAVE UNIT TEST
+        if (!result.getAthlete().isAssignedToDiscipline(result.getDiscipline())) {
+            throw new BadRequestException("Athlete " + result.getAthlete().getFullName() + " is not assigned to " + result.getDiscipline().getName() + ".");
+        }
+
         resultRepository.save(result);
 
         return toDTO(result);
@@ -95,8 +100,6 @@ public class ResultService {
 
     public List<ResultDetailedResponseDTO> registerBulkResultsForAthletes(List<ResultRequestDTO> resultRequestDTOList) {
         List<ResultDetailedResponseDTO> resultDetailedResponseDTOS = new ArrayList<>();
-
-
 
         for (ResultRequestDTO request: resultRequestDTOList) {
             resultDetailedResponseDTOS.add(registerResultForAthlete(request));
@@ -140,7 +143,7 @@ public class ResultService {
         newResult.setId(resultInDB.getId());
 
         //TODO: SKAL HAVE UNIT TEST
-        if (!newResult.getAthlete().getDisciplines().contains(newResult.getDiscipline())) {
+        if (!newResult.getAthlete().isAssignedToDiscipline(newResult.getDiscipline())) {
             throw new BadRequestException("Athlete " + newResult.getAthlete().getFullName() + " is not assigned to discipline " + newResult.getDiscipline().getName() + ".");
         }
 

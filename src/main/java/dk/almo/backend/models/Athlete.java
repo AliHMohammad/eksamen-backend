@@ -142,4 +142,9 @@ public class Athlete {
     public void setGender(Gender gender) {
         this.gender = gender;
     }
+
+    //TODO: UNIT TEST!!
+    public boolean isAssignedToDiscipline(Discipline discipline) {
+        return this.disciplines.contains(discipline);
+    }
 }
