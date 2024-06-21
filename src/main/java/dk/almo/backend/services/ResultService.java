@@ -60,7 +60,7 @@ public class ResultService {
         return toDTO(resultInDB);
     }
 
-    private ResultDetailedResponseDTO toDTO(Result result) {
+    public ResultDetailedResponseDTO toDTO(Result result) {
         return new ResultDetailedResponseDTO(
                 result.getId(),
                 result.getDate(),
@@ -70,7 +70,7 @@ public class ResultService {
         );
     }
 
-    private Result toEntity(ResultRequestDTO resultRequestDTO) {
+    public Result toEntity(ResultRequestDTO resultRequestDTO) {
         Discipline disciplineInDB = disciplineRepository.findById(resultRequestDTO.disciplineId())
                 .orElseThrow(() -> new EntityNotFoundException("Discipline with id " + resultRequestDTO.disciplineId() + " not found."));
         Athlete athleteInDB = athleteRepository.findById(resultRequestDTO.athleteId())
@@ -88,7 +88,6 @@ public class ResultService {
     public ResultDetailedResponseDTO registerResultForAthlete(ResultRequestDTO resultRequestDTO) {
         Result result = toEntity(resultRequestDTO);
 
-        //TODO: SKAL HAVE UNIT TEST
         if (!result.getAthlete().isAssignedToDiscipline(result.getDiscipline())) {
             throw new BadRequestException("Athlete " + result.getAthlete().getFullName() + " is not assigned to " + result.getDiscipline().getName() + ".");
         }
@@ -142,7 +141,7 @@ public class ResultService {
 
         newResult.setId(resultInDB.getId());
 
-        //TODO: SKAL HAVE UNIT TEST
+
         if (!newResult.getAthlete().isAssignedToDiscipline(newResult.getDiscipline())) {
             throw new BadRequestException("Athlete " + newResult.getAthlete().getFullName() + " is not assigned to discipline " + newResult.getDiscipline().getName() + ".");
         }

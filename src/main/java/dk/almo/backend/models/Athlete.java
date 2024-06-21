@@ -143,7 +143,6 @@ public class Athlete {
         this.gender = gender;
     }
 
-    //TODO: UNIT TEST!!
     public boolean isAssignedToDiscipline(Discipline discipline) {
         return this.disciplines.contains(discipline);
     }

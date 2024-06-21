@@ -30,7 +30,6 @@ public class DisciplineService {
     }
 
     public DisciplineResponseDTO updateDisciplineType(long id, String type) {
-        //TODO: Lav en unittest
         Discipline disciplineInDB = disciplineRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Discipline with id " + id + " not found."));
 
@@ -46,7 +45,6 @@ public class DisciplineService {
     }
 
     public DisciplineResponseDTO getDisciplineById(long id) {
-        //TODO: Test?
         return disciplineRepository.findById(id).map(this::toDTO)
                 .orElseThrow(() -> new EntityNotFoundException("Discipline with id " + id + " not found."));
     }

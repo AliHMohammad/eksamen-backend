@@ -55,7 +55,6 @@ public class AthleteService {
 
     @Transactional
     public AthleteResponseDTO deleteAthlete(long id) {
-        //TODO: Unit Test?
         Athlete athleteInDB = athleteRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Athlete with id " + id + " not found."));
 
@@ -97,7 +96,6 @@ public class AthleteService {
 
 
     public AthleteResponseDTO assignDisciplineToAthlete(long disciplineId, long athleteId) {
-        //TODO: Lav en unittest?
         Discipline disciplineInDB = disciplineRepository.findById(disciplineId)
                 .orElseThrow(() -> new EntityNotFoundException("Discipline with id " + disciplineId + " not found."));
         Athlete athleteInDB = athleteRepository.findById(athleteId)
@@ -118,7 +116,6 @@ public class AthleteService {
     }
 
     public AthleteResponseDTO deleteDisciplineToAthlete(long disciplineId, long athleteId) {
-        //TODO: Lav en unittest?
         Discipline disciplineInDB = disciplineRepository.findById(disciplineId)
                 .orElseThrow(() -> new EntityNotFoundException("Discipline with id " + disciplineId + " not found."));
         Athlete athleteInDB = athleteRepository.findById(athleteId)
