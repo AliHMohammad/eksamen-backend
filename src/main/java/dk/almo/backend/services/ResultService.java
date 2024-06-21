@@ -49,7 +49,7 @@ public class ResultService {
         return toDTO(resultInDB);
     }
 
-    public ResultDetailedResponseDTO updateResultValue(long id, long newValue) {
+    public ResultDetailedResponseDTO patchResultValue(long id, long newValue) {
         Result resultInDB = resultRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Result with id " + id + " not found."));
         resultInDB.setValue(newValue);
@@ -129,5 +129,16 @@ public class ResultService {
 
         return resultRepository.findAllByDisciplineId(discipline, pageable)
                 .map(this::toDTO);
+    }
+
+    public ResultDetailedResponseDTO updateResultById(long id, ResultRequestDTO resultRequestDTO) {
+        Result newResult = toEntity(resultRequestDTO);
+        Result resultInDB = resultRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Result with id " + id + " not found."));
+
+        newResult.setId(resultInDB.getId());
+        resultRepository.save(resultInDB);
+
+        return toDTO(newResult);
     }
 }

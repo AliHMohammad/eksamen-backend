@@ -44,8 +44,13 @@ public class ResultController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ResultDetailedResponseDTO> updateResultValue(@Valid @RequestBody ResultRequestValueDTO resultRequestValueDTO, @PathVariable long id) {
-        return ResponseEntity.ok(resultService.updateResultValue(id, resultRequestValueDTO.value()));
+    public ResponseEntity<ResultDetailedResponseDTO> patchResultValue(@Valid @RequestBody ResultRequestValueDTO resultRequestValueDTO, @PathVariable long id) {
+        return ResponseEntity.ok(resultService.patchResultValue(id, resultRequestValueDTO.value()));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ResultDetailedResponseDTO> updateResultById(@Valid @RequestBody ResultRequestDTO resultRequestDTO, @PathVariable long id) {
+        return ResponseEntity.ok(resultService.updateResultById(id, resultRequestDTO));
     }
 
     @PostMapping

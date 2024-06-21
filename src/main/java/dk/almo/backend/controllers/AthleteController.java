@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -39,6 +40,11 @@ public class AthleteController {
             @RequestParam Optional<String> searchBy
     ) {
         return ResponseEntity.ok(athleteService.getAthletes(pageIndex, pageSize, Long.valueOf(discipline), sortDir, sortBy, gender, club, searchBy));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<AthleteResponseDTO>> getAthletes() {
+        return ResponseEntity.ok(athleteService.getAthletes());
     }
 
 

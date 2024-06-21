@@ -1,5 +1,6 @@
 package dk.almo.backend.controllers;
 
+import dk.almo.backend.DTOs.athlete.AthleteResponseDTO;
 import dk.almo.backend.DTOs.result.ResultRequestDTO;
 import dk.almo.backend.DTOs.result.ResultRequestValueDTO;
 import dk.almo.backend.DTOs.result.ResultDetailedResponseDTO;
@@ -176,5 +177,41 @@ class ResultIntegrationTest {
                     assertNotNull(responseBody.get(0).id());
                     assertNotNull(responseBody.get(1).id());
                 });
+    }
+
+    @Test
+    void updateResultById() {
+        var athlete = new Athlete("Mikkel Jørgensen", LocalDate.now(), Gender.MALE);
+        var discipline = new Discipline("Rowing 400m", ResultType.MILLISECONDS);
+        var newDiscipline = new Discipline("Skiing 200m", ResultType.MILLISECONDS);
+        var oldResult = new Result(LocalDate.now(), 100L, discipline, athlete);
+        athleteRepository.save(athlete);
+        disciplineRepository.save(discipline);
+        disciplineRepository.save(newDiscipline);
+        resultRepository.save(oldResult);
+
+        var payload = new ResultRequestDTO(
+                LocalDate.now().plusDays(2),
+                2000L,
+                newDiscipline.getId(),
+                athlete.getId()
+        );
+
+        webTestClient
+                .put().uri("/results/" + oldResult.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(payload)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody(ResultDetailedResponseDTO.class)
+                .value(res -> {
+                    assertNotNull(res.id());
+                    assertEquals(payload.date(), res.date());
+                    assertEquals(payload.value(), res.value());
+                    assertEquals(payload.disciplineId(), res.discipline().id());
+                    assertEquals(payload.athleteId(), res.athlete().id());
+                });
+
     }
 }

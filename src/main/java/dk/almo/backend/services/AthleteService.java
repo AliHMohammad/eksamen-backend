@@ -211,6 +211,11 @@ public class AthleteService {
         );
     }
 
+    public List<AthleteResponseDTO> getAthletes() {
+        return athleteRepository.findAll()
+                .stream().map(this::toDTO).toList();
+    }
+
     public Page<AthleteResponseDTO> getAthletes(
             Integer pageIndex,
             Integer pageSize,
