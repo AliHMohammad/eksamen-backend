@@ -101,7 +101,7 @@ public class AthleteService {
         Athlete athleteInDB = athleteRepository.findById(athleteId)
                 .orElseThrow(() -> new EntityNotFoundException("Athlete with id " + athleteId + " not found."));
 
-        // Hvis han alllerede har disciplinen. TODO: unitTest?
+
         if (athleteInDB.isAssignedToDiscipline(disciplineInDB)) {
             throw new BadRequestException("Athlete with id " + athleteId + " is already assigned to discipline " + disciplineInDB.getName() + ".");
         }
@@ -121,7 +121,6 @@ public class AthleteService {
         Athlete athleteInDB = athleteRepository.findById(athleteId)
                 .orElseThrow(() -> new EntityNotFoundException("Athlete with id " + athleteId + " not found."));
 
-        // Hvis han ikke har disciplinen. TODO: unitTest?
         if (!athleteInDB.isAssignedToDiscipline(disciplineInDB)) {
             throw new BadRequestException("Athlete with id " + athleteId + " is not assigned to discipline " + disciplineInDB.getName() + ".");
         }
