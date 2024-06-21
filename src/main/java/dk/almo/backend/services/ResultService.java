@@ -9,6 +9,7 @@ import dk.almo.backend.models.Result;
 import dk.almo.backend.repositories.AthleteRepository;
 import dk.almo.backend.repositories.DisciplineRepository;
 import dk.almo.backend.repositories.ResultRepository;
+import dk.almo.backend.utils.BadRequestException;
 import dk.almo.backend.utils.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -137,6 +138,12 @@ public class ResultService {
                 .orElseThrow(() -> new EntityNotFoundException("Result with id " + id + " not found."));
 
         newResult.setId(resultInDB.getId());
+
+        //TODO: SKAL HAVE UNIT TEST
+        if (!newResult.getAthlete().getDisciplines().contains(newResult.getDiscipline())) {
+            throw new BadRequestException("Athlete " + newResult.getAthlete().getFullName() + " is not assigned to discipline " + newResult.getDiscipline().getName() + ".");
+        }
+
         resultRepository.save(newResult);
 
         return toDTO(newResult);
