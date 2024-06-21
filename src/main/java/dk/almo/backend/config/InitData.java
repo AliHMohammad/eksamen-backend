@@ -48,18 +48,44 @@ public class InitData implements ApplicationRunner {
 
     private void createAthletesResults() {
         List<Result> results = new ArrayList<>();
-        results.add(new Result(LocalDate.now(), 100L, disciplines.get(0), athletes.get(0)));
-        results.add(new Result(LocalDate.now(), 150L, disciplines.get(1), athletes.get(1)));
-        results.add(new Result(LocalDate.now(), 200L, disciplines.get(0), athletes.get(2)));
-        results.add(new Result(LocalDate.now(), 12L, disciplines.get(2), athletes.get(3)));
-        results.add(new Result(LocalDate.now(), 110L, disciplines.get(2), athletes.get(4)));
-        results.add(new Result(LocalDate.now(), 160L, disciplines.get(2), athletes.get(5)));
-        results.add(new Result(LocalDate.now(), 210L, disciplines.get(2), athletes.get(6)));
-        results.add(new Result(LocalDate.now(), 310L, disciplines.get(3), athletes.get(7)));
-        results.add(new Result(LocalDate.now(), 120L, disciplines.get(3), athletes.get(8)));
+        results.add(new Result(LocalDate.now(), 1056340L, disciplines.get(0), athletes.get(0)));
+        results.add(new Result(LocalDate.now(), 103240L, disciplines.get(0), athletes.get(0)));
+        results.add(new Result(LocalDate.now(), 1022140L, disciplines.get(0), athletes.get(0)));
+        results.add(new Result(LocalDate.now(), 1034220L, disciplines.get(0), athletes.get(0)));
+        results.add(new Result(LocalDate.now(), 2053454L, disciplines.get(0), athletes.get(2)));
+        results.add(new Result(LocalDate.now(), 30423420L, disciplines.get(0), athletes.get(2)));
+        results.add(new Result(LocalDate.now(), 423442323, disciplines.get(0), athletes.get(2)));
+        results.add(new Result(LocalDate.now(), 43243242L, disciplines.get(0), athletes.get(2)));
+        results.add(new Result(LocalDate.now(), 44332342L, disciplines.get(0), athletes.get(3)));
+        results.add(new Result(LocalDate.now(), 34323232, disciplines.get(0), athletes.get(3)));
+        results.add(new Result(LocalDate.now(), 234L, disciplines.get(1), athletes.get(0)));
+        results.add(new Result(LocalDate.now(), 343L, disciplines.get(1), athletes.get(0)));
+        results.add(new Result(LocalDate.now(), 322L, disciplines.get(1), athletes.get(0)));
+        results.add(new Result(LocalDate.now(), 123L, disciplines.get(1), athletes.get(1)));
+        results.add(new Result(LocalDate.now(), 132L, disciplines.get(1), athletes.get(1)));
+        results.add(new Result(LocalDate.now(), 232L, disciplines.get(1), athletes.get(3)));
+        results.add(new Result(LocalDate.now(), 126L, disciplines.get(1), athletes.get(3)));
+        results.add(new Result(LocalDate.now(), 150L, disciplines.get(1), athletes.get(9)));
         results.add(new Result(LocalDate.now(), 170L, disciplines.get(1), athletes.get(9)));
+        results.add(new Result(LocalDate.now(), 230L, disciplines.get(1), athletes.get(10)));
+        results.add(new Result(LocalDate.now(), 126L, disciplines.get(1), athletes.get(10)));
         results.add(new Result(LocalDate.now(), 220L, disciplines.get(1), athletes.get(10)));
         results.add(new Result(LocalDate.now(), 320L, disciplines.get(1), athletes.get(11)));
+        results.add(new Result(LocalDate.now(), 344L, disciplines.get(1), athletes.get(11)));
+        results.add(new Result(LocalDate.now(), 354L, disciplines.get(1), athletes.get(11)));
+        results.add(new Result(LocalDate.now(), 32L, disciplines.get(2), athletes.get(1)));
+        results.add(new Result(LocalDate.now(), 12L, disciplines.get(2), athletes.get(3)));
+        results.add(new Result(LocalDate.now(), 20L, disciplines.get(2), athletes.get(4)));
+        results.add(new Result(LocalDate.now(), 32L, disciplines.get(2), athletes.get(5)));
+        results.add(new Result(LocalDate.now(), 22L, disciplines.get(2), athletes.get(6)));
+        results.add(new Result(LocalDate.now(), 32434, disciplines.get(3), athletes.get(7)));
+        results.add(new Result(LocalDate.now(), 32443, disciplines.get(3), athletes.get(7)));
+        results.add(new Result(LocalDate.now(), 23433, disciplines.get(3), athletes.get(8)));
+        results.add(new Result(LocalDate.now(), 23322, disciplines.get(3), athletes.get(5)));
+        results.add(new Result(LocalDate.now(), 23421, disciplines.get(3), athletes.get(5)));
+        results.add(new Result(LocalDate.now(), 23767, disciplines.get(3), athletes.get(6)));
+        results.add(new Result(LocalDate.now(), 23422, disciplines.get(3), athletes.get(6)));
+        results.add(new Result(LocalDate.now(), 23434, disciplines.get(3), athletes.get(6)));
         resultRepository.saveAll(results);
     }
 
