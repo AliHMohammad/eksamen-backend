@@ -137,7 +137,7 @@ public class ResultService {
                 .orElseThrow(() -> new EntityNotFoundException("Result with id " + id + " not found."));
 
         newResult.setId(resultInDB.getId());
-        resultRepository.save(resultInDB);
+        resultRepository.save(newResult);
 
         return toDTO(newResult);
     }
