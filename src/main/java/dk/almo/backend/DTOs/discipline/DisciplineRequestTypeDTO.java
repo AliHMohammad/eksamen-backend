@@ -5,6 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 public record DisciplineRequestTypeDTO(
         //TODO: Mangler besked
         @NotBlank
-        String type
+        String resultType
 ) {
 }

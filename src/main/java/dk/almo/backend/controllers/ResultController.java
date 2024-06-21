@@ -1,7 +1,7 @@
 package dk.almo.backend.controllers;
 
 import dk.almo.backend.DTOs.result.ResultRequestDTO;
-import dk.almo.backend.DTOs.result.ResultRequestValueDTO;
+import dk.almo.backend.DTOs.result.ResultRequestResultTypeDTO;
 import dk.almo.backend.DTOs.result.ResultDetailedResponseDTO;
 import dk.almo.backend.services.ResultService;
 import jakarta.validation.Valid;
@@ -44,8 +44,8 @@ public class ResultController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ResultDetailedResponseDTO> patchResultValue(@Valid @RequestBody ResultRequestValueDTO resultRequestValueDTO, @PathVariable long id) {
-        return ResponseEntity.ok(resultService.patchResultValue(id, resultRequestValueDTO.value()));
+    public ResponseEntity<ResultDetailedResponseDTO> patchResultValue(@Valid @RequestBody ResultRequestResultTypeDTO resultRequestValueDTO, @PathVariable long id) {
+        return ResponseEntity.ok(resultService.patchResultValue(id, resultRequestValueDTO.resultType()));
     }
 
     @PutMapping("/{id}")

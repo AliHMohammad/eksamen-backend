@@ -1,8 +1,7 @@
 package dk.almo.backend.controllers;
 
-import dk.almo.backend.DTOs.athlete.AthleteResponseDTO;
 import dk.almo.backend.DTOs.result.ResultRequestDTO;
-import dk.almo.backend.DTOs.result.ResultRequestValueDTO;
+import dk.almo.backend.DTOs.result.ResultRequestResultTypeDTO;
 import dk.almo.backend.DTOs.result.ResultDetailedResponseDTO;
 import dk.almo.backend.models.*;
 import dk.almo.backend.repositories.AthleteRepository;
@@ -91,7 +90,7 @@ class ResultIntegrationTest {
         webTestClient
                 .patch().uri("/results/" + result.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new ResultRequestValueDTO(
+                .bodyValue(new ResultRequestResultTypeDTO(
                         500L
                 ))
                 .exchange()

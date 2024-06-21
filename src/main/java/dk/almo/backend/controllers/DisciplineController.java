@@ -39,7 +39,7 @@ public class DisciplineController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<DisciplineResponseDTO> updateDisciplineType(@PathVariable long id, @Valid @RequestBody DisciplineRequestTypeDTO disciplineRequestNameDTO) {
-        return ResponseEntity.ok(disciplineService.updateDisciplineType(id, disciplineRequestNameDTO.type()));
+        return ResponseEntity.ok(disciplineService.updateDisciplineType(id, disciplineRequestNameDTO.resultType()));
     }
 
     @GetMapping
